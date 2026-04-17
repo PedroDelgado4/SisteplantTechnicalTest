@@ -1,37 +1,44 @@
 <script setup lang="ts">
+import type { Machine } from '../data/machines'
+import { computed } from 'vue'
+import { PropType } from 'vue'
+
 const props = defineProps({
-    machine: Object
+    machine: {
+        type: Object as PropType<Machine>,
+        required: true //obligatoria para evitar errores
+    }
 })
 
-function getStatusColor() {
+const statusColor = computed(() => {
     if (props.machine.status === 'operational') return 'green'
     if (props.machine.status === 'warning') return 'orange'
     if (props.machine.status === 'maintenance') return 'red'
     return 'gray'
-}
+})
 
-function getStatusText() {
+const statusText = computed(() => {
     const status = props.machine.status
     if (status === 'operational') return 'Operativa'
     if (status === 'warning') return 'Advertencia'
     if (status === 'maintenance') return 'Mantenimiento'
     return 'Desconocido'
-}
+})
 
-function needsMaintenance() {
+const isMaintenanceNeeded = computed(() => {
     const lastMaintenance = new Date(props.machine.lastMaintenance)
     const now = new Date()
     const daysDiff = (now.getTime() - lastMaintenance.getTime()) / (1000 * 3600 * 24)
     return daysDiff > 30
-}
+})
 </script>
 
 <template>
-    <div class="machine-card" onclick="console.log('clicked')">
+    <div class="machine-card">
         <div class="machine-header">
             <h3>{{ machine.name }}</h3>
-            <span class="status-badge" :style="{ backgroundColor: getStatusColor() }">
-                {{ getStatusText() }}
+            <span class="status-badge" :style="{ backgroundColor: statusColor }">
+                {{ statusText }}
             </span>
         </div>
 
@@ -51,13 +58,13 @@ function needsMaintenance() {
                 <strong>{{ machine.temperature }}°C</strong>
             </div>
 
-            <div v-if="needsMaintenance()" class="warning-message">
+            <div v-if="isMaintenanceNeeded" class="warning-message">
                 ⚠️ Requiere mantenimiento
             </div>
         </div>
 
         <div class="machine-actions">
-            <button><router-link :to="'/machine/' + machine.id">Ver Detalles</router-link></button>
+            <router-link :to="'/machine/' + machine.id" class="action-btn">Ver Detalles</router-link>
         </div>
     </div>
 </template>
@@ -129,11 +136,36 @@ function needsMaintenance() {
     text-decoration: none;
 }
 
+.action-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: #f3f4f6;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    color: inherit;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.action-btn:hover {
+    background-color: #e5e7eb;
+}
+
+
 @media (prefers-color-scheme: dark) {
     .machine-card {
         background-color: #1a1a1a;
         border-color: #444;
         color: rgba(255, 255, 255, 0.87);
+    }
+    .action-btn {
+        background-color: #343434;
+    }
+    .action-btn:hover {
+        background-color: #444444;
     }
 }
 </style>

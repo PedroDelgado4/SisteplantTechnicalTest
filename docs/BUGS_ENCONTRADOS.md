@@ -253,5 +253,33 @@ Se aplicó flex-wrap: wrap para permitir que el contenido fluya a la siguiente l
 Además, se ha añadido una media query para pantallas pequeñas que cambia el flex a column para su correcta visualización.
 
 ---
+
+## Bug #6: [HTML inválido y sintaxis nativa de eventos]
+
+**Archivo**: `src/components/MachineCard.vue`  
+**Línea**: ~37
+
+**Descripción del problema**:
+El componente tenía dos problemas de marcado: utilizaba atributo onclick de HTML nativo en lugar del listener de eventos de Vue (@click) y anidaba un <router-link> dentro de un <button>, lo que es semánticamente invalido.
+
+**Impacto**:
+- [x] Medio (problema notable pero no bloqueante)
+
+
+**Solución aplicada**:
+```
+// Código anterior
+<div class="machine-card" onclick="console.log('clicked')">
+<button><router-link :to="'/machine/' + machine.id">Ver Detalles</router-link></button>
+
+// Código corregido
+<div class="machine-card">
+<router-link :to="'/machine/' + machine.id" class="action-btn">Ver Detalles</router-link>
+```
+
+**Explicación de la solución**:
+Se eliminó evento nativo innecesario. Se ha reemplazado un button y un <a> por un único router-link estilizado mediante la nueva clase CSS .action-btn.
+
+---
 **Total de bugs encontrados**: XX
 **Total de bugs corregidos**: XX
