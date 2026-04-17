@@ -2,6 +2,8 @@
 import { ref, computed } from 'vue'
 import { useMachineStore } from '../stores/machineStore'
 import MachineCard from '../components/MachineCard.vue'
+import type { Machine } from '../data/machines'
+
 
 const store = useMachineStore()
 
@@ -11,20 +13,15 @@ const filteredMachines = computed(() => {
     if (selectedLine.value === 'all') {
         return store.machines
     }
-
-    const result: any = []
-    store.machines.forEach((machine: any) => {
-        if (machine.line === selectedLine.value) {
-            result.push(machine)
-        }
-    })
-    return result
+    // refactor: cambio de foreach por .filter()
+    return store.machines.filter(m => m.line === selectedLine.value)
 })
 
+
 const lineStats = computed(() => {
-    const operational = filteredMachines.value.filter((m: any) => m.status === 'operational').length
-    const maintenance = filteredMachines.value.filter((m: any) => m.status === 'maintenance').length
-    const warning = filteredMachines.value.filter((m: any) => m.status === 'warning').length
+    const operational = filteredMachines.value.filter((m: Machine) => m.status === 'operational').length
+    const maintenance = filteredMachines.value.filter((m: Machine) => m.status === 'maintenance').length
+    const warning = filteredMachines.value.filter((m: Machine) => m.status === 'warning').length
 
     return { operational, maintenance, warning }
 })
@@ -39,7 +36,7 @@ const productionLines = ['all', 'Línea A', 'Línea B', 'Línea C']
         <div class="filters">
             <label>Filtrar por línea:</label>
             <select v-model="selectedLine">
-                <option v-for="line in productionLines" :value="line">
+                <option v-for="line in productionLines" :key="line" :value="line">
                     {{ line === 'all' ? 'Todas las líneas' : line }}
                 </option>
             </select>
@@ -61,7 +58,7 @@ const productionLines = ['all', 'Línea A', 'Línea B', 'Línea C']
         </div>
 
         <div class="machines-grid">
-            <MachineCard v-for="machine in filteredMachines" :machine="machine" />
+            <MachineCard v-for="machine in filteredMachines" :key="machine.id ":machine="machine" />
         </div>
     </div>
 </template>
@@ -99,8 +96,14 @@ h1 {
     padding: 1rem;
     background-color: #f3f4f6;
     border-radius: 8px;
+    flex-wrap: wrap; /* Añadimos flex-wrap para que los elementos salten de linea si es necesario*/
 }
-
+@media (max-width: 768px) {
+    .line-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
 .stat-item {
     display: flex;
     gap: 0.5rem;

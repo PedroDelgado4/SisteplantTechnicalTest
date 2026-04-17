@@ -11,9 +11,18 @@
 **Ubicación**:
 Lógica de datos de las máquinas
 **Archivos modificados**
-src/data/machines.ts
+src/data/machines.ts, src/views/ProductionLines.vue
 **Impacto**: 
 Se elimina el uso abusivo de any creando una interfaz Machine. Esto proporciona seguridad de tipos.
+
+### 2 Tipado y rendimiento
+
+**Ubicación**:
+Vista de Líneas de Producción
+**Archivos modificados**
+src/views/ProductionLines.vue
+**Impacto**: 
+Se refactorizó la propiedad computada filteredMachines, reemplazando un bucle inificiente por un método funcional.
 ---
 
 ## 2. Composition API
@@ -54,11 +63,14 @@ Se simplificó usando .filter(), lo que reduce significativamente la complejidad
 
 ## 5. Mejora de Componentes
 
+### 1- Uso de :key
 **Ubicación**:
-
+Vista de Líneas de Producción
 **Archivos modificados**
-
-**Impacto**: Cómo mejora el código
+ProductionLines.vue
+**Impacto**: 
+Se ha corregido una mala práctica de Vue3 añadiendo el atributo obligatorio :key a las v-for tanto en las opciones del <select>
+como en el listado de <MachineCard>, asegurando un correcto renderizado y seguimiento del VDOM por parte del framework.
 
 ---
 

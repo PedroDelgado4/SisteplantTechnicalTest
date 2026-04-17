@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 const router = useRouter()
 
-let isMenuOpen = false
+// convertimos la variable en reactiva con ref para que vue note el cambio
+const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
-    isMenuOpen = !isMenuOpen
+    isMenuOpen.value = !isMenuOpen.value
 }
 
 const navigate = (path: string) => {
     router.push(path)
-    isMenuOpen = false
+    isMenuOpen.value = false
 }
 </script>
 
@@ -41,6 +43,7 @@ const navigate = (path: string) => {
     color: white;
     padding: 1rem 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .header-content {
@@ -101,6 +104,7 @@ const navigate = (path: string) => {
         flex-direction: column;
         padding: 1rem;
         gap: 1rem;
+        z-index: 99; /* para que esté por encima de todo */
     }
 
     .nav.open {

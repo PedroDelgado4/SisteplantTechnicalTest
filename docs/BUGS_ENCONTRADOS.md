@@ -117,6 +117,75 @@ function getMachineById(id: number) {
 Se añadió la sentencia return necesaria para que la función devuelva el objeto encontrado al componente que realiza la consulta.
 
 ---
+## Bug #4: [Menú móvil no se despliega]
+
+**Archivo**: `src/components/Header.vue`  
+**Línea**: ~6-16 (script) ~46-50 (estilos)
+
+**Descripción del problema**:
+[
+Había dos problemas: 
+- El estado del menú (isMenuOpen) no era rezctivo (let en vez de ref) por lo que Vue no actualizaba el HTML al hacer click en el boton
+- En CSS, el desplegable (.nav en móvil) no tenia un z-index definido y su contenedor padre (.header) carecía de position relative.
+Esto provocaba que Vue no supiera que el menú había cambiado y que, aunque lo supiera, el usuario no lo vería por que lo tapa el resto de la página.
+]
+
+**Impacto**:
+- [X] Alto (afecta UX significativamente)
+
+
+**Solución aplicada**:
+```
+// Código anterior
+(script)
+let isMenuOpen = false
+const toggleMenu = () => { isMenuOpen = !isMenuOpen }
+
+(stilos)
+.header {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative; /* ¡Añade esta línea! */
+}
+@media (max-width: 768px) {
+.nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #1e3a8a;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+
+// Código corregido
+(script)
+import { ref } from 'vue'
+const isMenuOpen = ref(false)
+const toggleMenu = () => { isMenuOpen.value = !isMenuOpen.value }
+
+(estilos)
+.header {
+    position: relative; /* Añadido para anclar el submenú */
+}
+@media (max-width: 768px) {
+    .nav {
+        z-index: 99; /* Añadido para sobreponerse al contenido */
+    }
+}
+```
+
+**Explicación de la solución**:
+Se implementó ref de Vue para recuperar la reactividad del botón de menú. En los estilos, se aplicó position:relative al padre .header y se le
+asignó position:absolute y z-index: 99 a .nav para garantizar que se superponga correctamente al contenido.
+
+
+---
 ## Bug #1: [Título descriptivo del bug]
 
 **Archivo**: `ruta/al/archivo.vue`  
@@ -140,6 +209,48 @@ Se añadió la sentencia return necesaria para que la función devuelva el objet
 
 **Explicación de la solución**:
 
+
+---
+## Bug #5: [Desbordamiento de interfaz en listado de estadísticas]
+
+**Archivo**: `src/views/ProductionLines.vue`  
+**Línea**: ~92
+
+**Descripción del problema**:
+En pantallas móvil, el contenedor de estadísticas de las líneas de producción (.line-stats) no adaptaba su contenido por
+estar configurado como flex sin permitir el salto de línea.
+
+**Impacto**:
+- [X] Alto (afecta UX significativamente)
+
+
+**Solución aplicada**:
+```
+// Código anterior
+.line-stats {
+
+    display: flex;
+    {...}
+
+
+}
+// Código corregido
+.line-stats {
+    display: flex;
+    flex-wrap: wrap; 
+    {...} 
+}
+@media (max-width: 768px) {
+    .line-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+```
+
+**Explicación de la solución**:
+Se aplicó flex-wrap: wrap para permitir que el contenido fluya a la siguiente línea si falta espacio.
+Además, se ha añadido una media query para pantallas pequeñas que cambia el flex a column para su correcta visualización.
 
 ---
 **Total de bugs encontrados**: XX
