@@ -1,0 +1,30 @@
+{
+  "name": "sisteplant-technical-test",
+  "version": "1.0.0",
+  "description": "Prueba técnica para desarrolladores Front-End - Sisteplant",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:e2e": "cypress open",
+    "test:e2e:ci": "cypress run"
+  },
+  "dependencies": {
+    "vue": "^3.4.21",
+    "pinia": "^2.1.7",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/test-utils": "^2.4.5",
+    "cypress": "^13.7.0",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.0",
+    "vitest": "^1.4.0",
+    "vue-tsc": "^2.0.7",
+    "jsdom": "^24.0.0"
+  }
+}
