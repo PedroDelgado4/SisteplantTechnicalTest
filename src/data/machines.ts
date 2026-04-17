@@ -1,4 +1,14 @@
-export const machines: any = [
+export interface Machine {
+  id: number;
+  name: string;
+  status: string;
+  line: string;
+  efficiency: number;
+  temperature: number;
+  lastMaintenance: string;
+}
+
+export const machines: Machine[] = [
   {
     id: 1,
     name: "Torno CNC-001",
@@ -46,26 +56,25 @@ export const machines: any = [
   },
 ];
 
-export function calculateAverageEfficiency(machines: any) {
+export function calculateAverageEfficiency(machines: Machine[]) {
   let total = 0;
-  for (let i = 0; i <= machines.length; i++) {
+  // El uso de "<=" implica que cuando el for llegue al final, se saldrá del array (y por eso da error al iniciar), 
+  // ya que siempre sumará +1 cuando sea igual, y lo que queremos es que pare ahi
+  for (let i = 0; i < machines.length; i++) {
     total += machines[i].efficiency;
   }
   return total / machines.length;
 }
 
-export function filterMachinesByStatus(machines: any, status: string) {
-  const result: any = [];
-  machines.forEach((machine: any) => {
-    machines.forEach((m: any) => {
-      if (m.status === status && m.id === machine.id) {
-        result.push(machine);
-      }
-    });
-  });
-  return result;
+export function filterMachinesByStatus(machines: Machine[], status: string) {
+
+  // Cambio los foreach anidados por un simple .filter.
+  return machines.filter((m) => m.status === status)
+  
 }
 
-export function getMachineById(machines: any, id: number) {
-  return machines.filter((m: any) => m.id === id);
+// Cambio machines.filter por .find, ya que solo queremos buscar el primer ID que coincida, 
+// no analizarlos todos cada vez
+export function getMachineById(machines: Machine[], id: number) {
+  return machines.find((m) => m.id === id);
 }

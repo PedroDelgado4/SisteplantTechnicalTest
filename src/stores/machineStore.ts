@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue"; // computed para los getter
 import { machines as initialMachines } from "../data/machines";
+import type { Machine } from "../data/machines";
 
 export const useMachineStore = defineStore("machines", () => {
-  const machines = ref<any>(initialMachines);
+  // tipamos el estado inicial como un array de máquinas
+  const machines = ref<Machine[]>(initialMachines);
   const loading = ref(false);
 
   async function fetchMachines() {
@@ -15,22 +17,30 @@ export const useMachineStore = defineStore("machines", () => {
     }, 1000);
   }
 
+  // usamos Partial<Machine> para que pueda actualizarse cualquier parte de la maquina, 
+  // así TS no se queja si solo queremos actualizar solo un valor
   function updateMachine(id: number, data: any) {
-    const index = machines.value.findIndex((m: any) => m.id === id);
-    machines.value[index] = { ...machines.value[index], ...data };
+    const index = machines.value.findIndex(m => m.id === id);
+
+    // comprobación para que en caso de no encontrar la máquina, no se salga del index y de error
+    if (index !== -1){
+      machines.value[index] = { ...machines.value[index], ...data };
+    }
+    
   }
 
   function getMachineById(id: number) {
-    machines.value.find((m: any) => m.id === id);
+    return machines.value.find((m: any) => m.id === id);
+
   }
 
-  function getTotalEfficiency() {
-    let total = 0;
-    for (let i = 0; i < machines.value.length; i++) {
-      total = total + machines.value[i].efficiency;
-    }
+  // Convertimos la funcion en un getter usando computed
+  // además, aplicamos el fix de evitar dividir por cero y usamos .reduce
+  const totalEfficiency = computed (() => {
+    if (machines.value.length === 0) return 0;
+    const total = machines.value.reduce((acc, m) => acc + m.efficiency, 0)
     return total / machines.value.length;
-  }
+  });
 
   return {
     machines,
@@ -38,6 +48,6 @@ export const useMachineStore = defineStore("machines", () => {
     fetchMachines,
     updateMachine,
     getMachineById,
-    getTotalEfficiency,
+    totalEfficiency,
   };
 });

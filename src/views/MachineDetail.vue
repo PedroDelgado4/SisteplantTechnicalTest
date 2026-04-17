@@ -2,12 +2,13 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMachineStore } from '../stores/machineStore'
+import type { Machine } from '../data/machines'
 
 const route = useRoute()
 const router = useRouter()
 const store = useMachineStore()
 
-const machine = ref<any>(null)
+const machine = ref<Machine>()
 const isEditing = ref(false)
 
 const formData = ref({
@@ -16,20 +17,25 @@ const formData = ref({
     temperature: 0
 })
 
-onMounted(() => {
+// Mejora: función para no repetir código en onMounted y watch
+const loadMachine = () => {
     const id = parseInt(route.params.id as string)
     machine.value = store.getMachineById(id)
-
-    formData.value = {
-        name: machine.value.name,
-        efficiency: machine.value.efficiency,
-        temperature: machine.value.temperature
+    if(machine.value) {
+        formData.value = {
+            name: machine.value.name,
+            efficiency: machine.value.efficiency,
+            temperature: machine.value.temperature
+        } 
     }
+}
+
+onMounted(() => {
+    loadMachine()  
 })
 
-watch(() => route.params.id, (newId) => {
-    const id = parseInt(newId as string)
-    machine.value = store.getMachineById(id)
+watch(() => route.params.id, () => {
+    loadMachine()
 })
 
 const toggleEdit = () => {
@@ -37,18 +43,30 @@ const toggleEdit = () => {
 }
 
 const saveChanges = () => {
-    const id = parseInt(route.params.id as string)
-    store.updateMachine(id, formData.value)
-    machine.value = { ...machine.value, ...formData.value }
-    isEditing.value = false
-    alert('Cambios guardados')
+    // protegmos la logica (solo guarda si la maquina existe)
+    if (machine.value){
+        const id = parseInt(route.params.id as string)
+        store.updateMachine(id, formData.value)
+
+        // actualizamos vista localmente
+        machine.value = { ...machine.value, ...formData.value }
+        isEditing.value = false
+        alert('Cambios guardados')
+    }
+
+    
+    
+    
 }
 
 const cancelEdit = () => {
-    formData.value = {
-        name: machine.value.name,
-        efficiency: machine.value.efficiency,
-        temperature: machine.value.temperature
+    // protegemos el cancelar
+    if (machine.value) {
+        formData.value = {
+            name: machine.value.name,
+            efficiency: machine.value.efficiency,
+            temperature: machine.value.temperature
+        }
     }
     isEditing.value = false
 }
@@ -59,8 +77,9 @@ const goBack = () => {
 </script>
 
 <template>
-    <div class="machine-detail">
+    <div class="machine-detail" v-if="machine">
         <button @click="goBack" class="back-button">← Volver</button>
+
 
         <div class="detail-header">
             <h1>{{ machine.name }}</h1>
@@ -114,6 +133,10 @@ const goBack = () => {
                 </div>
             </div>
         </div>
+    </div>
+    <div v-else class="loading-state">
+        <p>Cargando detalles de la máquina o máquina no encontrada...</p>
+        <button @click="goBack" class="back-button">← Volver al inicio</button>
     </div>
 </template>
 
