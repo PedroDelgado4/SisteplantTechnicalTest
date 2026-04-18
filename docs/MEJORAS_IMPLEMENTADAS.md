@@ -105,8 +105,8 @@ Vista de Líneas de Producción
 ProductionLines.vue
 
 **Impacto**: 
-Se ha corregido una mala práctica de Vue3 añadiendo el atributo obligatorio :key a las v-for tanto en las opciones del <select>
-como en el listado de <MachineCard>, asegurando un correcto renderizado. Sin :key, cuando modifiquemos/borremos/creemos algun elemento, los valores van a ir ligados a su posición, por lo que se romperá la visualización o incluso la app.
+Se ha corregido una mala práctica de Vue3 añadiendo el atributo obligatorio :key a las v-for tanto en las opciones del select
+como en el listado de MachineCard, asegurando un correcto renderizado. Sin :key, cuando modifiquemos/borremos/creemos algun elemento, los valores van a ir ligados a su posición, por lo que se romperá la visualización o incluso la app.
 
 ---
 
