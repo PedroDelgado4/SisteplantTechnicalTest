@@ -129,7 +129,17 @@ Store de gestión de estado global
 src/stores/machinesStore.spec.ts
 
 **Impacto**:
-Añadidos tests para el store de Vue validando los getters. Mediante setActivePinia y createPinia dentro de beforeEach garantizamos aislamiento de estado entre pruebas. Se validó el calculo de la eficiencia global y el manejo de errores por divisiones por 0 o NaN
+Añadidos tests para el store de Vue validando los getters. Mediante setActivePinia y createPinia dentro de beforeEach garantizamos aislamiento de estado entre pruebas. Se validó el calculo de la eficiencia global y el manejo de errores por divisiones por 0 o NaN.
+
+### 3
+**Ubicación**:
+Componentes visuales UI
+
+**Archivos modificados**:
+src/components/MachineCard.spec.ts
+
+**Impacto**:
+Se implementaron unit tests de renderizado de componentes vue/test-utils. Se comprobó que el componente recibe e interpreta correctamente sus props y que las propiedades computadas se reflejan en el DOM. Además se testeó el renderizado correcto de la alerta de mantenimiento usando fechas manipuladas.
 ---
 
 ## 8. Estados de UI
