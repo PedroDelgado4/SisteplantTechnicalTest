@@ -4,7 +4,7 @@
 
 ---
 
-## Bug #1: [Error de índice en cálculo de eficiencia]
+## Bug #1: Error de índice en cálculo de eficiencia
 
 **Archivo**: `src/data/machines.ts`  
 **Línea**: ~52
@@ -54,7 +54,7 @@ export function calculateAverageEfficiency(machines: Machine[]) {
 
 ---
 
-## Bug #2: [Método incorrecto de filtrado]
+## Bug #2: Método incorrecto de filtrado
 
 **Archivo**: `src/data/machines.ts`  
 **Línea**: ~78
@@ -84,10 +84,11 @@ export function getMachineById(machines: Machine[], id: number) {
 
 **Explicación de la solución**:
 Uso .find() en la función getMachineById() para que devuelva un objeto en lugar de un array evitando así errores de renderizado.
+
 ---
 
 ---
-## Bug #3: [Funciones del Store sin retorno de datos]
+## Bug #3: Funciones del Store sin retorno de datos
 
 **Archivo**: `src/stores/machinesStore.ts`  
 **Línea**: ~24
@@ -117,7 +118,7 @@ function getMachineById(id: number) {
 Se añadió la sentencia return necesaria para que la función devuelva el objeto encontrado al componente que realiza la consulta.
 
 ---
-## Bug #4: [Menú móvil no se despliega]
+## Bug #4: Menú móvil no se despliega
 
 **Archivo**: `src/components/Header.vue`  
 **Línea**: ~6-16 (script) ~46-50 (estilos)
@@ -186,7 +187,7 @@ asignó position:absolute y z-index: 99 a .nav para garantizar que se superponga
 
 
 ---
-## Bug #5: [Desbordamiento de interfaz en listado de estadísticas]
+## Bug #5: Desbordamiento de interfaz en listado de estadísticas
 
 **Archivo**: `src/views/ProductionLines.vue`  
 **Línea**: ~92
@@ -229,7 +230,7 @@ Además, se ha añadido una media query para pantallas pequeñas que cambia el f
 
 ---
 
-## Bug #6: [HTML inválido y sintaxis nativa de eventos]
+## Bug #6: HTML inválido y sintaxis nativa de eventos
 
 **Archivo**: `src/components/MachineCard.vue`  
 **Línea**: ~37
@@ -257,7 +258,7 @@ Se eliminó evento nativo innecesario. Se ha reemplazado un button y un <a> por 
 
 ---
 
-## Bug #7: [Pérdida de reactividad en el estado de Dashboard]
+## Bug #7: Pérdida de reactividad en el estado de Dashboard
 
 **Archivo**: `src/views/Dashboard.vue`  
 **Línea**: ~10-30
@@ -285,7 +286,7 @@ Dashboard reaccione inmediatamente cuando algún estado cambia.
 
 ---
 
-## Bug #8: [Ejecución ineficiente de funciones en el Template]
+## Bug #8: Ejecución ineficiente de funciones en el Template
 
 **Archivo**: `src/views/Dashboard.vue`  
 **Línea**: ~52-57
@@ -316,7 +317,7 @@ Se extrajo la lógica del template hacia propiedades computadas, tipando correct
 
 ---
 
-## Bug #9: [Desbordamiento horizontal]
+## Bug #9: Desbordamiento horizontal
 
 **Archivo**: `src/App.vue`, 'src/views/ProductionLines.vue, 'src/views/Dashboard.vue  
 **Línea**: ~22-35
@@ -352,7 +353,7 @@ Se añadió box-sizing: border-box para obligar al navegador a calcular el paddi
 
 ---
 
-## Bug #10: [Pantalla en blanco en rutas no existentes]
+## Bug #10: Pantalla en blanco en rutas no existentes
 
 **Archivo**: `src/index.ts`  
 **Línea**: ~6 (array de routes)

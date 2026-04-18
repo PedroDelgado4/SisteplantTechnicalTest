@@ -25,9 +25,9 @@
 
 ## Mejoras de UI/UX
 
-- [ ] 
-- [ ] 
-- [ ] 
+- [X] Sistema de notificaciones: Reemplazar los alert() nativos por notificaciones emergentes que mejoren la experiencia al guardar o cancelar. 
+- [X] Visualizacion de datos en gráficas: integrar librerias como Chart.js en el Dashboard para mostrar la evolución temporal de la eficiencia mediante gráficos.
+- [X] Modo oscuro persistente: guardar la preferencia del tema claro/oscuro y añadir un toggle para que el usuario acivarlo/desactivarlo.
 
 ---
 
@@ -41,7 +41,7 @@
 
 ## Seguridad y Validación
 
-- [ ] 
+- [X] Autenticación y roles: Añadir un control de acceso basado en roles para así poder elegir qué usuarios pueden o no ver o realizar cambios en las máquinas.
 - [ ] 
 
 ---
@@ -56,7 +56,7 @@
 
 ## Documentación
 
-- [ ] [Otras ideas]
+- [X] Storybook: crear un catálogo interactivo de los componentes UI base (botones, tarjetas, inputs, etc) para que futuros devs puedan reutilizarlos fácilmente.
 
 ---
 

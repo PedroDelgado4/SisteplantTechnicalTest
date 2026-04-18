@@ -10,8 +10,10 @@
 
 **Ubicación**:
 Lógica de datos de las máquinas
+
 **Archivos modificados**
 src/data/machines.ts, src/views/ProductionLines.vue
+
 **Impacto**: 
 Se elimina el uso abusivo de any creando una interfaz Machine. Esto proporciona seguridad de tipos.
 
@@ -19,10 +21,13 @@ Se elimina el uso abusivo de any creando una interfaz Machine. Esto proporciona 
 
 **Ubicación**:
 Vista de Líneas de Producción
+
 **Archivos modificados**
 src/views/ProductionLines.vue
+
 **Impacto**: 
 Se refactorizó la propiedad computada filteredMachines, reemplazando un bucle inificiente por un método funcional.
+
 ---
 
 ## 2. Composition API
@@ -32,6 +37,7 @@ Tarjeta de máquina
 
 **Archivos modificados**
 MachineCard.vue
+
 **Impacto**:
 Refactorización de las funciones de renderizado a computed para mejorar el rendimiento de la lista.
 
@@ -42,8 +48,10 @@ Refactorización de las funciones de renderizado a computed para mejorar el rend
 ### 1
 **Ubicación**:
 Gestión de estado global
+
 **Archivos modificados**
 src/store/machineStore.ts
+
 **Impacto**:
 - Tipado: Se reemplazaron los any por Machine[] y Partial<Machine> previniendo errores de mutación de datos.
 - Seguridad: Se añadió una validación en updateMachine para evitar sobreescribir índices inexistentes.
@@ -53,10 +61,13 @@ a las mejores prácticas de Vue 3 y Pinia. Se mejoró la lógica interna usando 
 ### 2
 **Ubicación**:
 Dashboard de Producción
+
 **Archivos modificados**
 src/views/Dashboard.vue
+
 **Impacto**:
 Se ha refactorizado el cáculo de eficiencia para utilizar directamente un getter reactivo de Pinia eliminando código redundante, importaciones innecesarias y el uso de bloques try/catch injustificados en el componente visual.
+
 ---
 
 ## 4. Optimizaciones de Rendimiento
@@ -64,46 +75,60 @@ Se ha refactorizado el cáculo de eficiencia para utilizar directamente un gette
 ### 1 Optimización de filtrado
 **Ubicación**:
 Lógica de datos de las máquinas
+
 **Archivos modificados**
 src/data/machines.ts
+
 **Impacto**: Se refactorizó la función filterMachinesByStatus. El código original usaba dos bucles anidados de manera innecesaria.
 Se simplificó usando .filter(), lo que reduce significativamente la complejidad y mejora la legibilidad.
 
 ### 2 Optimización de filtrado
+
 **Ubicación**:
 Enrutador de la app
+
 **Archivos modificados**
 src/router/index.ts
+
 **Impacto**: Se implementó lazy loading basada en rutas. Esto reduce drásticamente la carga inicial, descargando el código de páginas secundarias solo cuando el usuario hace navega hacia ellas.
 
 ---
 
 ## 5. Mejora de Componentes
 
-### 1- Uso de :key
+### 1 Uso de :key
+
 **Ubicación**:
 Vista de Líneas de Producción
+
 **Archivos modificados**
 ProductionLines.vue
+
 **Impacto**: 
 Se ha corregido una mala práctica de Vue3 añadiendo el atributo obligatorio :key a las v-for tanto en las opciones del <select>
 como en el listado de <MachineCard>, asegurando un correcto renderizado. Sin :key, cuando modifiquemos/borremos/creemos algun elemento, los valores van a ir ligados a su posición, por lo que se romperá la visualización o incluso la app.
 
 ### 2- Tipado y validación
+
 **Ubicación**:
 Tarjeta de máquina
+
 **Archivos modificados**
 MachineCard.vue
+
 **Impacto**: 
 Se implementó validación estricta y tipado fuerte para las propiedades (Props) del componente.
+
 ---
 
 ## 6. Validación y Manejo de Errores
 
 **Ubicación**:
 Vista de Detalle de Máquina (formulario de edicion)
+
 **Archivos modificados**
 src/views/MachineDetail.vue
+
 **Impacto**: 
 Se implementó un sistema de validación robusta para el formulario de edición. Esto previene que el usuario introduzca datos corruptos en el store (nombres vacíos, temperaturas imposibles, etc). Proporciona feedback al usuario indicando qué campo contiene el error.
 
@@ -112,6 +137,7 @@ Se implementó un sistema de validación robusta para el formulario de edición.
 ## 7. Testing Unitario
 
 ### 1
+
 **Ubicación**:
 Funciones de lógica de datos
 
@@ -140,6 +166,7 @@ src/components/MachineCard.spec.ts
 
 **Impacto**:
 Se implementaron unit tests de renderizado de componentes vue/test-utils. Se comprobó que el componente recibe e interpreta correctamente sus props y que las propiedades computadas se reflejan en el DOM. Además se testeó el renderizado correcto de la alerta de mantenimiento usando fechas manipuladas.
+
 ---
 
 ## 8. Estados de UI
@@ -147,4 +174,5 @@ Se implementaron unit tests de renderizado de componentes vue/test-utils. Se com
 **Estados implementados**:
 - Se implementó una gestión de estados de carga (Loading State) utilizando la variable loading del store de pinia. Esto soluciona el problema de UX
 donde el usuario no recibía feedback visual durante la simulacion de la llamada a la API (fetchMachines)
+
 ---
