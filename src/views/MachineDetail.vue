@@ -17,6 +17,36 @@ const formData = ref({
     temperature: 0
 })
 
+// Estado ara guardar los mensajes de error
+const formErrors = ref({
+    name: '',
+    efficiency: '',
+    temperature: '' 
+})
+// funcion de validacion
+const validateForm = () => {
+    let isValid = true
+    // Reseteamos errores
+    formErrors.value = { name: '', efficiency: '', temperature: '' }
+
+    if (!formData.value.name.trim()) {
+        formErrors.value.name = 'El nombre es obligatorio'
+        isValid = false
+    }
+    
+    if (formData.value.efficiency < 0 || formData.value.efficiency > 100) {
+        formErrors.value.efficiency = 'Debe estar entre 0 y 100%'
+        isValid = false
+    }
+
+    if (formData.value.temperature < -20 || formData.value.temperature > 250) {
+        formErrors.value.temperature = 'Temperatura fuera de rango (-20 a 250)'
+        isValid = false
+    }
+
+    return isValid
+}
+
 // Mejora: función para no repetir código en onMounted y watch
 const loadMachine = () => {
     const id = parseInt(route.params.id as string)
@@ -43,6 +73,10 @@ const toggleEdit = () => {
 }
 
 const saveChanges = () => {
+    // comprobamos si el form es valido antes de guardar nada
+    if (!validateForm()) {
+        return // Si hay errores, cortamos la ejecución aquí
+    }
     // protegmos la logica (solo guarda si la maquina existe)
     if (machine.value){
         const id = parseInt(route.params.id as string)
@@ -52,11 +86,7 @@ const saveChanges = () => {
         machine.value = { ...machine.value, ...formData.value }
         isEditing.value = false
         alert('Cambios guardados')
-    }
-
-    
-    
-    
+    }  
 }
 
 const cancelEdit = () => {
@@ -68,6 +98,8 @@ const cancelEdit = () => {
             temperature: machine.value.temperature
         }
     }
+    // limpiamos errores al cancelar
+    formErrors.value = { name: '', efficiency: '', temperature: '' }
     isEditing.value = false
 }
 
@@ -95,8 +127,11 @@ const goBack = () => {
                 <div class="info-grid">
                     <div class="info-item">
                         <label>Nombre:</label>
-                        <input v-if="isEditing" v-model="formData.name" type="text" />
-                        <span v-else>{{ machine.name }}</span>
+                        <div v-if="isEditing" class="input-group">
+                            <input v-model="formData.name" type="text" :class="{ 'has-error': formErrors.name }"/>
+                            <span v-if="formErrors.name" class="error-text">{{ formErrors.name }}</span>
+                        </div>
+                        <span v-else>{{ machine.name }}</span>    
                     </div>
 
                     <div class="info-item">
@@ -111,13 +146,19 @@ const goBack = () => {
 
                     <div class="info-item">
                         <label>Eficiencia:</label>
-                        <input v-if="isEditing" v-model="formData.efficiency" type="number" />
+                        <div v-if="isEditing" class="input-group">
+                            <input v-model="formData.efficiency" type="number" :class="{ 'has-error': formErrors.efficiency }" />
+                            <span v-if="formErrors.efficiency" class="error-text">{{ formErrors.efficiency }}</span>
+                        </div>
                         <span v-else>{{ machine.efficiency }}%</span>
                     </div>
 
                     <div class="info-item">
                         <label>Temperatura:</label>
-                        <input v-if="isEditing" v-model="formData.temperature" type="number" />
+                        <div v-if="isEditing" class="input-group">
+                            <input v-model="formData.temperature" type="number" :class="{ 'has-error': formErrors.temperature }" />
+                            <span v-if="formErrors.temperature" class="error-text">{{ formErrors.temperature }}</span>
+                        </div>
                         <span v-else>{{ machine.temperature }}°C</span>
                     </div>
 
@@ -235,5 +276,21 @@ const goBack = () => {
         background-color: #1a1a1a;
         color: rgba(255, 255, 255, 0.87);
     }
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem
+}
+
+.error-text {
+    color: red;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+input.has-error {
+    border-color: red;
+    outline: #ef4444;
 }
 </style>

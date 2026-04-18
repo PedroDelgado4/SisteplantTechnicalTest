@@ -340,5 +340,61 @@ const maintenanceCount = computed(() => store.machines.filter((m: Machine) => m.
 Se extrajo la lógica del template hacia propiedades computadas, tipando correctamente los parametros.
 
 ---
+
+## Bug #9: [Desbordamiento horizontal]
+
+**Archivo**: `src/App.vue`  
+**Línea**: ~22-35
+
+**Descripción del problema**:
+El contenedor principal combinaba width: 100% con padding: 2rem sin especificar box-sizing. Esto provoca que el ancho total
+excediera el viewport causando scroll horizontal indeseado o no mostrándose completamente los componentes en móviles con pantallas muy pequeñas. 
+
+**Impacto**:
+- [X] Alto (afecta UX significativamente)
+
+
+**Solución aplicada**:
+```
+// Código anterior
+
+
+// Código corregido
+
+```
+
+**Explicación de la solución**:
+
+
+---
+
+## Bug #10: [Pantalla en blanco en rutas no existentes]
+
+**Archivo**: `src/index.ts`  
+**Línea**: ~6 (array de routes)
+
+**Descripción del problema**:
+El enrutador no tenía definida una ruta comodín para evitar pantallas en blanco cuando el usuario intenta acceder a una página de la app que no existe, rompiendo la navegación. 
+
+**Impacto**:
+- [X] Alto (afecta UX significativamente)
+
+
+**Solución aplicada**:
+```
+// Código anterior
+routes: [ { path: '/', component: Dashboard }, ... ]
+
+// Código corregido
+routes: [
+  // ... rutas normales
+  { path: '/:pathMatch(.*)*', name: 'NotFound', redirect: '/' }
+]
+
+```
+**Explicación de la solución**:
+Se implementó una ruta global con la expresión regular de VueRouter /:pathMatch(.*)* que captura cualquier URL no registrada previamente y redirige al usuario al Dashboard de forma segura.
+
+---
 **Total de bugs encontrados**: XX
 **Total de bugs corregidos**: XX

@@ -69,6 +69,13 @@ src/data/machines.ts
 **Impacto**: Se refactorizó la función filterMachinesByStatus. El código original usaba dos bucles anidados de manera innecesaria.
 Se simplificó usando .filter(), lo que reduce significativamente la complejidad y mejora la legibilidad.
 
+### 2 Optimización de filtrado
+**Ubicación**:
+Enrutador de la app
+**Archivos modificados**
+src/router/index.ts
+**Impacto**: Se implementó lazy loading basada en rutas. Esto reduce drásticamente la carga inicial, descargando el código de páginas secundarias solo cuando el usuario hace navega hacia ellas.
+
 ---
 
 ## 5. Mejora de Componentes
@@ -95,10 +102,11 @@ Se implementó validación estricta y tipado fuerte para las propiedades (Props)
 ## 6. Validación y Manejo de Errores
 
 **Ubicación**:
-
+Vista de Detalle de Máquina (formulario de edicion)
 **Archivos modificados**
-
-**Impacto**: Cómo mejora el código
+src/views/MachineDetail.vue
+**Impacto**: 
+Se implementó un sistema de validación robusta para el formulario de edición. Esto previene que el usuario introduzca datos corruptos en el store (nombres vacíos, temperaturas imposibles, etc). Proporciona feedback al usuario indicando qué campo contiene el error.
 
 ---
 
@@ -119,5 +127,6 @@ mantenibilidad del código.
 ## 8. Estados de UI
 
 **Estados implementados**:
-
+- Se implementó una gestión de estados de carga (Loading State) utilizando la variable loading del store de pinia. Esto soluciona el problema de UX
+donde el usuario no recibía feedback visual durante la simulacion de la llamada a la API (fetchMachines)
 ---

@@ -25,5 +25,13 @@ import Header from './components/Header.vue'
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box; /* Esto arregla el bug visual en pantallas muy pequeñas en el que el contenido no se adapta de manera correcta horizontalmente */
 }
+/* Mejora: menos padding en moviles para ganar espacio */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+}
+
 </style>
