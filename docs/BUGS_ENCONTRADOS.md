@@ -281,5 +281,64 @@ El componente tenía dos problemas de marcado: utilizaba atributo onclick de HTM
 Se eliminó evento nativo innecesario. Se ha reemplazado un button y un <a> por un único router-link estilizado mediante la nueva clase CSS .action-btn.
 
 ---
+
+## Bug #7: [Pérdida de reactividad en el estado de Dashboard]
+
+**Archivo**: `src/views/Dashboard.vue`  
+**Línea**: ~10-30
+
+**Descripción del problema**:
+Los valores del total de máquinas y la eficiencia media se calculaban una única vez, lo que rompe la reactividad.
+
+**Impacto**:
+- [x] Alto (afecta UX significativamente)
+
+
+**Solución aplicada**:
+```
+// Código anterior
+const totalMachines = ref(store.machines.length)
+onMounted(() => { totalMachines.value = store.machines.length })
+
+// Código corregido
+const totalMachines = computed(() => store.machines.length)
+```
+
+**Explicación de la solución**:
+Se han sustituido las variables estáticas y asignaciones manuales en los ciclos de vida por propiedades computadas garantizando que el
+Dashboard reaccione inmediatamente cuando algún estado cambia.
+
+---
+
+## Bug #8: [Ejecución ineficiente de funciones en el Template]
+
+**Archivo**: `src/views/Dashboard.vue`  
+**Línea**: ~52-57
+
+**Descripción del problema**:
+Se utilizaban métodos pesados de filtrado de arrays (.filter) directamente dentro del template, lo que supone una carga
+en el rendimiento innecesaria.
+
+**Impacto**:
+- [x] Medio (problema notable pero no bloqueante)
+
+
+**Solución aplicada**:
+```
+// Código anterior
+<p>{{store.machines.filter((m: any) => m.status === 'operational').length}}</p>
+<p class="stat-value">{{store.machines.filter((m: any) => m.status === 'maintenance').length}}
+
+// Código corregido
+const operationalCount = computed(() => store.machines.filter((m: Machine) => m.status === 'operational').length)
+const maintenanceCount = computed(() => store.machines.filter((m: Machine) => m.status === 'maintenance').length)
+<p>{{ operationalCount }}</p>
+<p>{{ maintenanceCount }}</p>
+```
+
+**Explicación de la solución**:
+Se extrajo la lógica del template hacia propiedades computadas, tipando correctamente los parametros.
+
+---
 **Total de bugs encontrados**: XX
 **Total de bugs corregidos**: XX

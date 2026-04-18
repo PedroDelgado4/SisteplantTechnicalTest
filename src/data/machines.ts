@@ -16,7 +16,7 @@ export const machines: Machine[] = [
     line: "Línea A",
     efficiency: 87.5,
     temperature: 45,
-    lastMaintenance: "2024-02-15",
+    lastMaintenance: "2026-04-15",
   },
   {
     id: 2,

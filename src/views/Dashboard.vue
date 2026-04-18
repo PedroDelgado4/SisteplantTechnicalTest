@@ -1,33 +1,34 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useMachineStore } from '../stores/machineStore'
 import MachineCard from '../components/MachineCard.vue'
-import { calculateAverageEfficiency } from '../data/machines'
+import type { Machine } from "../data/machines";
 
 const store = useMachineStore()
 
-const selectedLine = ref('all')
-
+// dejamos un solo onmounted para pedir los dats
 onMounted(() => {
     store.fetchMachines()
 })
 
-const averageEfficiency = ref(0)
-const calculateAverage = () => {
-    try {
-        averageEfficiency.value = calculateAverageEfficiency(store.machines)
-    } catch (e) {
-        console.error('Error calculating efficiency:', e)
-        averageEfficiency.value = 0
-    }
-}
+// Refactorizacion: usamos computed para reactividad
 
-const totalMachines = ref(store.machines.length)
+// total reactivo
+const totalMachines = computed(() => store.machines.length)
 
-onMounted(() => {
-    calculateAverage()
-    totalMachines.value = store.machines.length
+// getter creando anteriormente
+const averageEfficiency = computed(() => store.totalEfficiency)
+
+
+const operationalCount = computed(() => {
+    return store.machines.filter((m: Machine) => m.status === 'operational').length
 })
+
+const maintenanceCount = computed(() => 
+    store.machines.filter((m: Machine) => m.status === 'maintenance').length
+)
+
+
 </script>
 
 <template>
@@ -48,14 +49,14 @@ onMounted(() => {
             <div class="stat-card">
                 <h3>Operativas</h3>
                 <p class="stat-value">
-                    {{store.machines.filter((m: any) => m.status === 'operational').length}}
+                    {{operationalCount}}
                 </p>
             </div>
 
             <div class="stat-card">
                 <h3>En Mantenimiento</h3>
                 <p class="stat-value">
-                    {{store.machines.filter((m: any) => m.status === 'maintenance').length}}
+                    {{maintenanceCount}}
                 </p>
             </div>
         </div>
@@ -63,7 +64,7 @@ onMounted(() => {
         <h2>Máquinas</h2>
 
         <div class="machines-grid">
-            <MachineCard v-for="machine in store.machines" :machine="machine" />
+            <MachineCard v-for="machine in store.machines" :key="machine.id" :machine="machine" />
         </div>
     </div>
 </template>
