@@ -35,37 +35,44 @@ const maintenanceCount = computed(() =>
     <div class="dashboard">
         <h1>Dashboard de Producción</h1>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Máquinas</h3>
-                <p class="stat-value">{{ totalMachines }}</p>
+        <div v-if="store.loading" class="loading-state">
+            <div class="spinner"></div>
+            <p>Cargando datos de las máquinas...</p>
+        </div>
+        <div v-else>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Máquinas</h3>
+                    <p class="stat-value">{{ totalMachines }}</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Eficiencia Promedio</h3>
+                    <p class="stat-value">{{ averageEfficiency.toFixed(1) }}%</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Operativas</h3>
+                    <p class="stat-value">
+                        {{operationalCount}}
+                    </p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>En Mantenimiento</h3>
+                    <p class="stat-value">
+                        {{maintenanceCount}}
+                    </p>
+                </div>
             </div>
 
-            <div class="stat-card">
-                <h3>Eficiencia Promedio</h3>
-                <p class="stat-value">{{ averageEfficiency.toFixed(1) }}%</p>
-            </div>
+            <h2>Máquinas</h2>
 
-            <div class="stat-card">
-                <h3>Operativas</h3>
-                <p class="stat-value">
-                    {{operationalCount}}
-                </p>
-            </div>
-
-            <div class="stat-card">
-                <h3>En Mantenimiento</h3>
-                <p class="stat-value">
-                    {{maintenanceCount}}
-                </p>
+            <div class="machines-grid">
+                <MachineCard v-for="machine in store.machines" :key="machine.id" :machine="machine" />
             </div>
         </div>
-
-        <h2>Máquinas</h2>
-
-        <div class="machines-grid">
-            <MachineCard v-for="machine in store.machines" :key="machine.id" :machine="machine" />
-        </div>
+        
     </div>
 </template>
 
@@ -113,5 +120,30 @@ h2 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
+}
+
+/* Estilos para el estado de carga */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+    color: #6b7280;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3b82f6; /* Color azul Vue */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 </style>
