@@ -91,7 +91,8 @@ h2 {
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    /* Cambiamos el 250px fijo por min */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
     gap: 1.5rem;
     margin-bottom: 3rem;
 }
@@ -118,7 +119,8 @@ h2 {
 
 .machines-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* Aqui tambien cambiamos el 250px fijo por min*/
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
     gap: 1.5rem;
 }
 

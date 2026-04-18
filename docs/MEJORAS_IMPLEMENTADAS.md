@@ -87,8 +87,7 @@ Vista de Líneas de Producción
 ProductionLines.vue
 **Impacto**: 
 Se ha corregido una mala práctica de Vue3 añadiendo el atributo obligatorio :key a las v-for tanto en las opciones del <select>
-como en el listado de <MachineCard>, asegurando un correcto renderizado. Sin :key, cuando modifiquemos/borremos/creemos algun elemento,
-los valores van a ir ligados a su posición, por lo que se romperá la visualización o incluso la app.
+como en el listado de <MachineCard>, asegurando un correcto renderizado. Sin :key, cuando modifiquemos/borremos/creemos algun elemento, los valores van a ir ligados a su posición, por lo que se romperá la visualización o incluso la app.
 
 ### 2- Tipado y validación
 **Ubicación**:
@@ -112,6 +111,7 @@ Se implementó un sistema de validación robusta para el formulario de edición.
 
 ## 7. Testing Unitario
 
+### 1
 **Ubicación**:
 Funciones de lógica de datos
 
@@ -119,9 +119,17 @@ Funciones de lógica de datos
 src/data/machines.spec.ts
 
 **Impacto**:
-Se han implementado las primeras pruebas unitarias utilizando Vitest con patrón AAA. Se testea la función getMachineById para garantizar
-que devuelve el objeto correcto cuando se le pasa un ID válido y que maneja de forma segura cuando se busca un ID inexistente. Esto asegura
-mantenibilidad del código.
+Se han implementado las primeras pruebas unitarias utilizando Vitest con patrón AAA. Se testea la función getMachineById para garantizar que devuelve el objeto correcto cuando se le pasa un ID válido y que maneja de forma segura cuando se busca un ID inexistente. Esto asegura mantenibilidad del código.
+
+### 2
+**Ubicación**:
+Store de gestión de estado global
+
+**Archivos modificados**:
+src/stores/machinesStore.spec.ts
+
+**Impacto**:
+Añadidos tests para el store de Vue validando los getters. Mediante setActivePinia y createPinia dentro de beforeEach garantizamos aislamiento de estado entre pruebas. Se validó el calculo de la eficiencia global y el manejo de errores por divisiones por 0 o NaN
 ---
 
 ## 8. Estados de UI

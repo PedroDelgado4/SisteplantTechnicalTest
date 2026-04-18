@@ -186,31 +186,6 @@ asignó position:absolute y z-index: 99 a .nav para garantizar que se superponga
 
 
 ---
-## Bug #1: [Título descriptivo del bug]
-
-**Archivo**: `ruta/al/archivo.vue`  
-**Línea**: ~XX
-
-**Descripción del problema**:
-[Explica qué está mal y por qué]
-
-**Impacto**:
-- [ ] Crítico (rompe funcionalidad principal)
-- [ ] Alto (afecta UX significativamente)
-- [ ] Medio (problema notable pero no bloqueante)
-- [ ] Bajo (problema menor o de calidad de código)
-
-**Solución aplicada**:
-```
-// Código anterior
-
-// Código corregido
-```
-
-**Explicación de la solución**:
-
-
----
 ## Bug #5: [Desbordamiento de interfaz en listado de estadísticas]
 
 **Archivo**: `src/views/ProductionLines.vue`  
@@ -343,12 +318,12 @@ Se extrajo la lógica del template hacia propiedades computadas, tipando correct
 
 ## Bug #9: [Desbordamiento horizontal]
 
-**Archivo**: `src/App.vue`  
+**Archivo**: `src/App.vue`, 'src/views/ProductionLines.vue, 'src/views/Dashboard.vue  
 **Línea**: ~22-35
 
 **Descripción del problema**:
 El contenedor principal combinaba width: 100% con padding: 2rem sin especificar box-sizing. Esto provoca que el ancho total
-excediera el viewport causando scroll horizontal indeseado o no mostrándose completamente los componentes en móviles con pantallas muy pequeñas. 
+excediera el viewport causando scroll horizontal indeseado o no mostrándose completamente los componentes en móviles con pantallas pequeñas. Además, los elementos hijos (grids) forzaban un ancho minimo absoluto en sus columnas, sumado a los márgenes aplicados, lo que también provocaba el bug en pantallas más pequeñas aún, como la del Iphone 5 o Iphone SE 2016 (320x568)
 
 **Impacto**:
 - [X] Alto (afecta UX significativamente)
@@ -356,15 +331,24 @@ excediera el viewport causando scroll horizontal indeseado o no mostrándose com
 
 **Solución aplicada**:
 ```
-// Código anterior
+/* Código anterior */
+.main-content {
+  width: 100%;
+  padding: 2rem;
+}
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 
-
-// Código corregido
-
+/* Código corregido */
+.main-content {
+  width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
 ```
 
 **Explicación de la solución**:
-
+Se añadió box-sizing: border-box para obligar al navegador a calcular el padding hacia dentro, respetando el 100% del ancho de la pantalla. También se añadió la función CSS min(100%, 300px) dentro de la declaracion minmax. Esto establece un mínimo base de 300px, pero si el contenedor es más pequeño, se limitará el ancho máximo al 100% del espacio disponible. Así ahorramos el uso de múltiples media querys para cada resolución.
 
 ---
 
@@ -396,5 +380,5 @@ routes: [
 Se implementó una ruta global con la expresión regular de VueRouter /:pathMatch(.*)* que captura cualquier URL no registrada previamente y redirige al usuario al Dashboard de forma segura.
 
 ---
-**Total de bugs encontrados**: XX
-**Total de bugs corregidos**: XX
+**Total de bugs encontrados**: 10
+**Total de bugs corregidos**: 10
